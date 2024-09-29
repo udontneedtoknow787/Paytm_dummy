@@ -94,10 +94,15 @@ router.put("/", authMiddleware, async (req, res) => {
             message: "Error while updating information"
         })
     }
-
-    await User.updateOne(req.body, {
-        _id: req.userId
-    })
+    const user = await User.findOne({_id: req.userId});
+    // console.log(user);
+    await User.updateOne(
+        {_id: req.userId},
+        {
+            $set: req.body
+        }
+    )
+    // console.log(updateuser)
 
     res.json({
         message: "Updated successfully"

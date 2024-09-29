@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const { DBURL } = require('./routes/config');
+const { MongoDB_URL } = require('./db_url');
 
-mongoose.connect(DBURL);
+mongoose.connect(MongoDB_URL);
+console.log("Database connected succesfully")
 
 const userSchema = mongoose.Schema({
     // firstname:{
