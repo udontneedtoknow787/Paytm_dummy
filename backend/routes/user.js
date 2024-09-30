@@ -87,7 +87,7 @@ const updateBody = zod.object({
     lastname: zod.string().optional(),
 })
 
-router.put("/", authMiddleware, async (req, res) => {
+router.put("/update", authMiddleware, async (req, res) => {
     const { success } = updateBody.safeParse(req.body)
     if (!success) {
         res.status(411).json({
@@ -107,6 +107,27 @@ router.put("/", authMiddleware, async (req, res) => {
     res.json({
         message: "Updated successfully"
     })
+})
+
+router.post('/dashboard',authMiddleware, async function(req,res){
+    const userID = req.userId;
+    const user = await User.findOne({
+        _id: userID
+    });
+    // console.log(user);
+    const account = await Account.findOne({
+        userId: userID
+    });
+    // console.log(account);
+    if(!user || !account){
+        return res.status(404).json({
+            message: "Error finding the accounts"
+        })
+    }
+    return res.status(200).json({
+        userId: user._id,
+        balance: account.balance
+    });
 })
 
 module.exports = router;
